@@ -1,0 +1,9 @@
+# mdBook build output — rebuilt by GitHub Actions on every push
+book/book/
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
