@@ -4,7 +4,14 @@
 
 ---
 
-- [What does an inference engine look like?](./ch01.md)
+- [What does an inference engine look like?](./ch01/index.md)
+  - [Start here](./ch01/00_start.md)
+  - [Loading a model](./ch01/01_load.md)
+  - [Sampling](./ch01/02_sampling.md)
+  - [Contracts](./ch01/03_contracts.md)
+  - [The engine](./ch01/04_engine.md)
+  - [The server](./ch01/05_server.md)
+  - [Benchmarking](./ch01/06_benchmark.md)
 - [How does generation actually work?](./ch02.md)
 - [What is the model doing?](./ch03.md)
 - [Why is decode slow, and how do we fix it?](./ch04.md)
