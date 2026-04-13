@@ -1,0 +1,998 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Inference From Scratch</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-7ac4e0a7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-e98b4730.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Inference From Scratch</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/arunpatala/inference-from-scratch-book" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="inference-from-scratch"><a class="header" href="#inference-from-scratch">Inference From Scratch</a></h1>
+<blockquote>
+<p><strong>This book is a work in progress. Chapters are being released incrementally.</strong></p>
+</blockquote>
+<hr>
+<h2 id="what-is-this-book"><a class="header" href="#what-is-this-book">What is this book?</a></h2>
+<p>Most engineers who work with language models treat them as black boxes: send a prompt, get a
+response. This book opens every box.</p>
+<p>You will build a complete LLM inference engine from scratch — in Python, in plain PyTorch, one
+concept at a time. By the end, you will have written your own autoregressive loop, your own
+attention kernel, your own KV cache, your own scheduler, your own batching system, and your own
+speculative decoder. Every optimization will be measured before and after against the same HTTP
+benchmark harness you build in Chapter 1.</p>
+<p>The engine you end up with is a simplified vLLM, built entirely by you, line by line.</p>
+<hr>
+<h2 id="who-is-this-for"><a class="header" href="#who-is-this-for">Who is this for?</a></h2>
+<ul>
+<li>ML engineers who use inference systems but want to understand what is happening inside them</li>
+<li>Systems engineers curious about what makes LLM serving different from regular serving</li>
+<li>Researchers who want to implement and experiment with inference optimizations</li>
+<li>Anyone who has read “Attention is All You Need” and wants to see how that attention becomes
+a production serving system</li>
+</ul>
+<p><strong>Prerequisites:</strong> Python, basic PyTorch, some familiarity with neural networks. No CUDA or GPU
+programming experience required — that is covered from scratch.</p>
+<hr>
+<h2 id="what-you-will-build"><a class="header" href="#what-you-will-build">What you will build</a></h2>
+<p>A single serving engine that evolves chapter by chapter. Each chapter adds one optimization,
+measures the speedup, and swaps it into the running server in one line. The benchmark numbers
+are real — run on the same hardware, the same model, the same prompts.</p>
+<p>By the end of Chapter 13, your engine handles:</p>
+<ul>
+<li>✅ Autoregressive generation with your own loop</li>
+<li>✅ Full transformer model built from scratch with real weights loaded</li>
+<li>✅ KV cache eliminating redundant computation</li>
+<li>✅ Static and continuous batching for multi-request throughput</li>
+<li>✅ Flash attention reducing memory from O(n²) to O(n)</li>
+<li>✅ Paged attention eliminating memory fragmentation</li>
+<li>✅ Prefix caching reusing KV blocks across requests</li>
+<li>✅ INT4 quantization halving memory footprint</li>
+<li>✅ Speculative decoding generating multiple tokens per step</li>
+</ul>
+<hr>
+<h2 id="chapters"><a class="header" href="#chapters">Chapters</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>#</th><th>Question</th><th>Key concept</th><th>Status</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>What does an inference engine look like?</td><td>Baseline HF server, TTFT/TPOT/throughput</td><td>🚧 Coming soon</td></tr>
+<tr><td>2</td><td>How does generation actually work?</td><td>Autoregressive loop, prefill vs decode</td><td>🚧 Coming soon</td></tr>
+<tr><td>3</td><td>What is the model doing?</td><td>Transformer from scratch, load real weights</td><td>🚧 Coming soon</td></tr>
+<tr><td>4</td><td>Why is decode slow, and how do we fix it?</td><td>KV cache</td><td>🚧 Coming soon</td></tr>
+<tr><td>5</td><td>How do we serve multiple requests at once?</td><td>Static batching, scheduler</td><td>🚧 Coming soon</td></tr>
+<tr><td>6</td><td>Profiling — where is time actually spent?</td><td>Roofline model, memory vs compute bound</td><td>🚧 Coming soon</td></tr>
+<tr><td>7</td><td>Writing GPU kernels with Triton</td><td>GEMM, tiling, shared memory</td><td>🚧 Coming soon</td></tr>
+<tr><td>8</td><td>How do we make attention faster?</td><td>Online softmax, Flash Attention</td><td>🚧 Coming soon</td></tr>
+<tr><td>9</td><td>Continuous batching</td><td>Iteration-level scheduling, no padding waste</td><td>🚧 Coming soon</td></tr>
+<tr><td>10</td><td>How do we manage memory efficiently?</td><td>Paged attention, block tables</td><td>🚧 Coming soon</td></tr>
+<tr><td>11</td><td>How do we avoid recomputing common prefixes?</td><td>Prefix caching, hash-based block reuse</td><td>🚧 Coming soon</td></tr>
+<tr><td>12</td><td>How do we run bigger models on less memory?</td><td>INT4/GPTQ quantization</td><td>🚧 Coming soon</td></tr>
+<tr><td>13</td><td>How do we generate faster without changing the model?</td><td>Speculative decoding, draft-target</td><td>🚧 Coming soon</td></tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id="the-code"><a class="header" href="#the-code">The code</a></h2>
+<p>Every chapter has a companion directory of numbered Python files. Each file is self-contained and
+runnable. The files build on each other within the chapter — run them in order.</p>
+<pre><code>chapters/
+├── ch01_baseline/
+│   ├── 00_start.py        ← run this first
+│   ├── 01_load.py
+│   ├── 02_sampling.py
+│   ├── 03_server.py
+│   └── 04_benchmark.py
+├── ch02_generate_loop/
+│   └── ...
+</code></pre>
+<p>Clone the repo and run any chapter independently:</p>
+<pre><code class="language-bash">git clone https://github.com/arunpatala/inference-from-scratch-book.git
+cd inference-from-scratch-book/CODE/chapters/ch01_baseline
+pip install torch transformers fastapi uvicorn requests
+python 00_start.py
+</code></pre>
+<hr>
+<h2 id="a-note-on-the-model"><a class="header" href="#a-note-on-the-model">A note on the model</a></h2>
+<p>All examples use small, freely available models that run on CPU so you can follow along without a
+GPU. The optimizations are GPU-native — the book explains what each one does on GPU hardware and
+why it matters at scale — but the code runs and produces correct output on any machine.</p>
+<hr>
+<p><em>Built in public. Feedback and corrections welcome via GitHub issues.</em></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="what-does-an-inference-engine-look-like"><a class="header" href="#what-does-an-inference-engine-look-like">What does an inference engine look like?</a></h1>
+<p>An inference engine is a surprisingly small thing. Strip away the HTTP routing, the batching logic, the memory management, and the GPU kernels, and what remains is a program that does three things: it takes text in, runs it through a neural network, and returns text out. That loop, at its core, is what this entire book is about.</p>
+<p>This chapter builds the simplest possible version of that loop in one sitting. By the end you will have a working server that accepts prompts over HTTP and returns generated text, along with a benchmark harness to measure how fast it runs. Every subsequent chapter takes one component from this baseline and replaces it with something faster, more capable, or more principled — but the overall shape stays the same.</p>
+<p>The chapter is organised as a sequence of self-contained files, each one adding a single layer of understanding. Read them in order, run each one, and by the time you reach the benchmark you will have a clear mental model of what an inference engine actually does — and exactly where the interesting engineering problems live.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>File</th><th>What it covers</th></tr>
+</thead>
+<tbody>
+<tr><td><code>00_start.py</code></td><td>The complete engine in 35 lines</td></tr>
+<tr><td><code>01_load.py</code></td><td>What model loading is actually doing</td></tr>
+<tr><td><code>02_sampling.py</code></td><td>How temperature, top-k, and top-p change the output</td></tr>
+<tr><td><code>03_contracts.py</code></td><td>The shared types every chapter uses</td></tr>
+<tr><td><code>04_engine.py</code></td><td>The engine abstraction</td></tr>
+<tr><td><code>05_server.py</code></td><td>Wrapping the engine in an HTTP API</td></tr>
+<tr><td><code>06_benchmark_offline.py</code></td><td>Measuring throughput directly</td></tr>
+<tr><td><code>06_benchmark_online.py</code></td><td>Measuring throughput over HTTP</td></tr>
+</tbody>
+</table>
+</div>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="start-here"><a class="header" href="#start-here">Start here</a></h1>
+<p>This is the entire inference engine.</p>
+<pre><code class="language-python">import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from config import MODEL_NAME, PROMPT
+
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model     = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+
+def generate_text(prompt, model, tokenizer, max_length=512, temperature=1, top_k=50, top_p=0.95):
+    inputs  = tokenizer.encode(prompt, return_tensors="pt")
+    outputs = model.generate(
+        inputs,
+        max_length=max_length,
+        temperature=temperature,
+        top_k=top_k,
+        top_p=top_p,
+        do_sample=True,
+    )
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+print(generate_text(PROMPT, model, tokenizer))
+</code></pre>
+<p>Run it:</p>
+<pre><code>python 00_start.py
+</code></pre>
+<p>You will see a pause, then some text. That pause is the entire cost of being an AI: loading hundreds of millions of numbers from disk into memory, arranging them into matrices, and preparing to multiply them together at high speed. The text that follows is the result of doing exactly that, once per token, until the model decides it is done.</p>
+<p>Every line of the program above is currently a black box. That is intentional. The goal of this first pass is to see the whole thing working before we start taking it apart. The rest of this chapter, and the rest of this book, opens each box in turn.</p>
+<h2 id="what-just-happened"><a class="header" href="#what-just-happened">What just happened</a></h2>
+<p>There are three steps inside <code>generate_text</code>, and they are the same three steps inside every language model inference system ever built, from the smallest research prototype to the largest production cluster.</p>
+<h3 id="step-1-tokenization"><a class="header" href="#step-1-tokenization">Step 1: Tokenization</a></h3>
+<pre><code class="language-python">inputs = tokenizer.encode(prompt, return_tensors="pt")
+</code></pre>
+<p>A language model cannot read text. What it reads is integers — specifically, indices into a fixed vocabulary of tens of thousands of subword units called tokens. The tokenizer’s job is to convert the raw string into that sequence of integers.</p>
+<p>The word “tokenizer” hides a surprising amount of machinery. Before a single integer is produced, the input text is normalised (Unicode is standardised, whitespace is cleaned), then split into preliminary chunks on word boundaries and punctuation, then passed through a learned compression algorithm — typically Byte Pair Encoding or a variant of it — that merges common character sequences into single tokens. A word like “unbelievable” might become three tokens: “un”, “believ”, “able”. A rare technical term might be split into individual characters. The choice of how to split determines how efficiently the model uses its fixed context window, and different models make different choices.</p>
+<p>The result of <code>tokenizer.encode</code> is a PyTorch tensor of integers. The sentence “According to all known laws of aviation, there is no way a bee should be able to fly” becomes something like <code>[12902, 2311, 477, 3245, 4141, ...]</code> — the exact values depend on the model’s vocabulary. This is what the model sees. It has never seen the characters ‘b’, ‘e’, ‘e’ in sequence; it has seen the integer that represents the token “bee”. The argument <code>return_tensors="pt"</code> wraps those integers in a PyTorch tensor so they can be passed directly to the model.</p>
+<h3 id="step-2-generation"><a class="header" href="#step-2-generation">Step 2: Generation</a></h3>
+<pre><code class="language-python">outputs = model.generate(
+    inputs,
+    max_length=max_length,
+    temperature=temperature,   # controls randomness (0 = deterministic)
+    top_k=top_k,               # only consider top-k most likely tokens
+    top_p=top_p,               # only consider tokens in top-p probability mass
+    do_sample=True,
+)
+</code></pre>
+<p>This single call is where the interesting work happens, and also where the most is hidden. Inside <code>model.generate</code>, the model runs a two-phase process that will occupy several later chapters.</p>
+<p>The first phase is called <strong>prefill</strong>. The model takes the full sequence of input token IDs and runs them through all of its layers in a single parallel forward pass. Every token attends to every earlier token simultaneously, building up rich contextual representations. The output of prefill is a probability distribution over the vocabulary: given this prompt, how likely is each possible next token? This phase is compute-intensive because it processes all tokens at once, and its cost grows with the length of the input.</p>
+<p>The second phase is called <strong>decode</strong>. The model samples one token from that distribution, appends it to the sequence, and then runs another forward pass — but this time processing only the new token, because the representations of all earlier tokens were computed in prefill and can be reused. The model outputs another distribution, another token is sampled, and the loop continues. Each decode step is cheap compared to prefill, but the steps must happen sequentially: you cannot start computing token five until token four has been chosen. This sequential constraint is the fundamental reason why inference is hard to scale, and it is the thread that runs through most of the optimisations in later chapters.</p>
+<p>The parameters <code>temperature</code>, <code>top_k</code>, and <code>top_p</code> all control the sampling step — how the model chooses which token to pick from the distribution at each decode step. At <code>temperature=0</code> the choice is deterministic: always take the most likely token, which is called greedy decoding. At higher temperatures the distribution is flattened, making lower-probability tokens more likely and the output more varied. <code>do_sample=True</code> tells HuggingFace to use sampling rather than greedy search. Section 1.2 explores all three parameters in detail.</p>
+<h3 id="step-3-detokenization"><a class="header" href="#step-3-detokenization">Step 3: Detokenization</a></h3>
+<pre><code class="language-python">return tokenizer.decode(outputs[0], skip_special_tokens=True)
+</code></pre>
+<p>The third step is the inverse of the first. <code>model.generate</code> returns a tensor of token IDs that includes both the original prompt and the newly generated tokens. <code>outputs[0]</code> selects the first (and only) sequence in the batch. <code>tokenizer.decode</code> maps each integer back to its string representation and joins them into a single string. The argument <code>skip_special_tokens=True</code> strips out control tokens like the model’s end-of-sequence marker, which should not appear in the final output.</p>
+<p>The full pipeline, then, is: text → integers → neural network loop → integers → text. Everything else in this book is engineering that makes the middle step faster, cheaper, or more capable of handling many requests at once.</p>
+<h2 id="what-to-notice-when-you-run-it"><a class="header" href="#what-to-notice-when-you-run-it">What to notice when you run it</a></h2>
+<p>There are two pauses. The first, before any output appears, is the model loading: the weights being read from disk and arranged in memory. The second, shorter pause is generation itself. On a CPU with the 10M parameter model used in this chapter, generation takes a fraction of a second per response. On a GPU with a 70B parameter model, it takes several seconds — which is exactly why throughput optimisation matters and why this book exists.</p>
+<p>Run the program a second time without changing anything. The output will be different. That is sampling: the model is not computing a single deterministic answer, it is drawing from a probability distribution, and that distribution has many plausible continuations. Whether that nondeterminism is a feature or a bug depends on the application, and controlling it precisely is what the sampling parameters are for.</p>
+<h2 id="what-comes-next"><a class="header" href="#what-comes-next">What comes next</a></h2>
+<p>Each subsequent section in this chapter takes one part of the program above and opens it. <code>01_load.py</code> shows what <code>AutoTokenizer.from_pretrained</code> and <code>AutoModelForCausalLM.from_pretrained</code> actually do — what is downloaded, how the weights are laid out in memory, and how long loading takes as model size grows. <code>02_sampling.py</code> shows what happens when you change <code>temperature</code>, <code>top_k</code>, and <code>top_p</code>, running the same prompt through each configuration so you can see the difference directly. <code>03_contracts.py</code> introduces the shared data types that every chapter in this book uses, so that when we replace the engine in later chapters the surrounding code stays the same.</p>
+<p>By the time you reach the server and the benchmark, you will have seen every component of this system working in isolation. Then, when Chapter 2 starts changing things, you will know exactly which box is being opened and why.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="loading-a-model"><a class="header" href="#loading-a-model">Loading a model</a></h1>
+<p>The first two lines of <code>00_start.py</code> are the most expensive lines in the entire program.</p>
+<pre><code class="language-python">tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model     = AutoModelForCausalLM.from_pretrained(MODEL_NAME, torch_dtype=torch.float32)
+</code></pre>
+<p>On a cold start, these two calls download several files from the HuggingFace Hub, parse a configuration file, construct a neural network architecture in memory, and then copy hundreds of millions of numbers into that architecture one tensor at a time. On subsequent runs the files are cached locally, so only the last two steps repeat — but even then, loading a large model can take several seconds. Understanding exactly what is happening in this time is the subject of this section.</p>
+<p>Run:</p>
+<pre><code>python 01_load.py
+python 01_load.py --model HuggingFaceTB/SmolLM2-135M
+</code></pre>
+<h2 id="what-autotokenizerfrom_pretrained-downloads"><a class="header" href="#what-autotokenizerfrom_pretrained-downloads">What <code>AutoTokenizer.from_pretrained</code> downloads</a></h2>
+<pre><code class="language-python">tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+</code></pre>
+<p>A tokenizer is not a neural network — it is a deterministic lookup table combined with a set of rules. <code>from_pretrained</code> downloads two things. The first is a vocabulary file: a mapping from every token the model knows (typically 32,000 to 128,000 subword strings) to an integer index. The second is a configuration file that specifies which tokenization algorithm to use — Byte Pair Encoding (BPE), WordPiece, Unigram, or one of several others — along with any special tokens the model was trained with, such as the beginning-of-sequence marker or the padding token.</p>
+<p>The <code>Auto</code> prefix means that HuggingFace inspects the configuration file and automatically selects the correct tokenizer class for the model you asked for. If the model was trained with a BPE tokenizer, you get a <code>BPETokenizer</code>. If it uses a SentencePiece model, you get that instead. You do not need to know which type is being used; the <code>encode</code> and <code>decode</code> methods work identically regardless.</p>
+<p>Once loaded, the tokenizer is fast. It runs entirely on CPU, requires no GPU, and processes most inputs in under a millisecond. Its output — a tensor of integer indices — is small: a 200-word prompt might produce 250 token IDs, each one a 32-bit integer.</p>
+<h2 id="what-automodelforcausallmfrom_pretrained-does"><a class="header" href="#what-automodelforcausallmfrom_pretrained-does">What <code>AutoModelForCausalLM.from_pretrained</code> does</a></h2>
+<pre><code class="language-python">model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, torch_dtype=torch.float32)
+</code></pre>
+<p>This call does three things in sequence: it reads the model’s configuration, constructs the neural network architecture in memory, and loads the trained weights into it.</p>
+<p>The configuration file — typically <code>config.json</code> in the model repository — describes the shape of the network: how many layers it has, how wide those layers are, how many attention heads each layer contains, what its vocabulary size is, and which activation function to use. <code>AutoModelForCausalLM</code> reads this file, looks up the right model class in an internal registry (mapping “llama” in the config to <code>LlamaForCausalLM</code>, for instance), and calls its constructor. At this point the network exists in memory but its parameters are random or uninitialized — it has the right shape, but no knowledge.</p>
+<p>The second step copies the trained parameters into that skeleton. The weights are stored on disk as a <code>safetensors</code> file — a format designed to be faster and safer than the legacy <code>.pkl</code> format. Each tensor in the file is matched by name to a parameter in the model and copied in. For a 10M parameter model this takes milliseconds. For a 70B parameter model it takes minutes — each parameter is a 32-bit float requiring 4 bytes of memory, so 70 billion parameters occupy 280 gigabytes in <code>float32</code>. In practice, production models are almost always loaded in <code>float16</code> or <code>bfloat16</code> (2 bytes per parameter), halving that to 140 GB. Quantisation to 8-bit or 4-bit reduces it further still, and Chapters 12 and 13 address this directly.</p>
+<p>The <code>torch_dtype=torch.float32</code> argument we pass in the chapter code forces all weights to be stored as 32-bit floats. This makes the arithmetic easier to reason about — the numbers are exactly representable, without the rounding that lower-precision formats introduce — at the cost of using twice the memory of <code>float16</code>. For the small model used in this chapter, the difference is negligible.</p>
+<h2 id="placing-the-model-on-a-device"><a class="header" href="#placing-the-model-on-a-device">Placing the model on a device</a></h2>
+<pre><code class="language-python">model = model.to(DEVICE).eval()
+</code></pre>
+<p>PyTorch models and tensors always live on a specific device — either the CPU or a particular GPU. When a model is first loaded with <code>from_pretrained</code>, it lands on CPU. The call <code>.to(DEVICE)</code> moves every parameter tensor to the target device. If <code>DEVICE</code> is <code>"cuda"</code>, each tensor is copied from system RAM into GPU VRAM over the PCIe bus. If <code>DEVICE</code> is <code>"cpu"</code>, nothing moves — the model stays where it is.</p>
+<p>The call <code>.eval()</code> switches the model into inference mode. During training, certain layers behave differently than they do at inference time. Dropout layers randomly zero out activations to prevent overfitting; at inference time, they should pass their input through unchanged. Batch normalisation layers use per-batch statistics during training and running statistics during inference. Calling <code>.eval()</code> activates the inference behaviour in all such layers. Omitting this call produces subtly wrong results that can be difficult to diagnose, because the model will still run — it just will not run correctly.</p>
+<p>The two calls are chained because <code>.to()</code> returns the model itself, making it idiomatic to write them on a single line.</p>
+<h2 id="measuring-what-you-loaded"><a class="header" href="#measuring-what-you-loaded">Measuring what you loaded</a></h2>
+<pre><code class="language-python">params = sum(p.numel() for p in model.parameters())
+print(f"  parameters : {params / 1e6:.1f}M")
+</code></pre>
+<p>Every <code>nn.Parameter</code> in the model is a tensor. <code>p.numel()</code> returns the total number of elements in that tensor — for a weight matrix of shape <code>[4096, 4096]</code> that is 16,777,216 elements. Summing this across all parameters gives the total parameter count. Dividing by one million and formatting to one decimal place gives the familiar shorthand: “10.5M”, “135M”, “7B”.</p>
+<p>Parameter count is a useful proxy for model capability and cost, but it is not the whole story. Memory consumption also depends on the data type: a 7B parameter model in <code>float16</code> occupies 14 GB, but the same model in <code>float32</code> occupies 28 GB. GPU memory also includes space for the KV cache during generation — the amount of memory needed to store the intermediate attention keys and values for every token in every layer — which can rival the model weights in size for long contexts. Chapter 4 covers the KV cache in detail.</p>
+<h2 id="verifying-it-works-a-tokenizer-smoke-test"><a class="header" href="#verifying-it-works-a-tokenizer-smoke-test">Verifying it works: a tokenizer smoke test</a></h2>
+<pre><code class="language-python">sample = "Hello, world!"
+ids    = tokenizer.encode(sample, return_tensors="pt")
+print(f"  text       : '{sample}'")
+print(f"  token ids  : {ids.tolist()}")
+print(f"  decoded    : '{tokenizer.decode(ids[0])}'")
+</code></pre>
+<p>Before running any generation, it is worth confirming that the tokenizer is working correctly. This snippet encodes a short string to token IDs and then decodes it back. If the decoded string matches the input — modulo any normalisation the tokenizer applies — everything is wired up correctly. It is a cheap sanity check that catches common mistakes like loading the wrong tokenizer for a given model, which produces plausible-looking but incorrect token IDs.</p>
+<p>The round-trip <code>encode → decode</code> should be lossless for any string the tokenizer supports. Punctuation and whitespace can sometimes look different after the round-trip because the tokenizer uses a byte-level representation internally, but the semantic content should be identical.</p>
+<h2 id="what-comes-next-1"><a class="header" href="#what-comes-next-1">What comes next</a></h2>
+<p>At this point, the model and tokenizer are loaded, placed on the correct device, and verified to be working. The next section, <code>02_sampling.py</code>, keeps the model exactly as it is and instead explores how changing the sampling parameters — <code>temperature</code>, <code>top_k</code>, and <code>top_p</code> — changes the character of the generated text. The model is not the variable; the sampling strategy is.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="sampling"><a class="header" href="#sampling">Sampling</a></h1>
+<p>Every time a language model generates a token it produces a vector of raw scores — one per word in its vocabulary — and then has to choose which word to output next. How it makes that choice has an enormous impact on the character of the text it produces. The same model, given the same prompt, can output a careful and predictable answer, a varied and creative one, or something approaching nonsense, depending entirely on the sampling strategy applied to those scores. This section makes that choice concrete and observable.</p>
+<pre><code class="language-python">def generate(model, tokenizer, prompt: str, max_new_tokens: int = BENCHMARK_TOKENS, **kwargs):
+    input_ids = tokenizer.encode(prompt, return_tensors="pt").to(DEVICE)
+    with torch.no_grad():
+        output_ids = model.generate(input_ids, max_new_tokens=max_new_tokens, **kwargs)
+    new_ids = output_ids[0][input_ids.shape[1]:]
+    return tokenizer.decode(new_ids, skip_special_tokens=True)
+</code></pre>
+<p>Run it:</p>
+<pre><code>python 02_sampling.py
+python 02_sampling.py --prompt "Once upon a time"
+</code></pre>
+<p>The <code>generate</code> helper above strips the prompt tokens from the output before decoding — <code>output_ids[0][input_ids.shape[1]:]</code> selects only the newly generated tokens — so what you see printed is the model’s continuation, not a repetition of the input. The <code>**kwargs</code> pattern passes whatever sampling arguments the caller provides directly to <code>model.generate</code>, which is what allows the demo below to explore every strategy through the same function.</p>
+<h2 id="from-logits-to-a-probability-distribution"><a class="header" href="#from-logits-to-a-probability-distribution">From logits to a probability distribution</a></h2>
+<p>Before any sampling strategy makes sense, it helps to understand what the model actually produces at each decode step. The final layer of the network outputs a vector of floating-point numbers called logits — one number for each token in the vocabulary, which for most modern models means somewhere between 32,000 and 128,000 values. A logit is a raw score: a higher number means the model considers that token a more plausible continuation of the sequence so far. The numbers themselves are not probabilities; they can be negative, arbitrarily large, and they do not sum to one.</p>
+<p>To turn logits into probabilities the model applies the softmax function, which exponentiates each logit and then divides by the sum of all exponentiated logits. The result is a proper probability distribution: every value is positive and they sum to exactly one. A token with a logit of 3.5 and one with a logit of 3.0 will not have probabilities of 3.5% and 3.0% — the exponential function amplifies differences, so the gap between them in probability space is larger than the gap in logit space.</p>
+<p>Once the probabilities are computed, some form of sampling algorithm picks the next token. The sampling parameters — <code>temperature</code>, <code>top_k</code>, <code>top_p</code> — all operate on the logits before or alongside the softmax step, reshaping the distribution before a token is drawn from it. Chapter 3 will implement this from scratch; for now the goal is to observe the effects.</p>
+<h2 id="greedy-decoding"><a class="header" href="#greedy-decoding">Greedy decoding</a></h2>
+<pre><code class="language-python">{"do_sample": False}
+</code></pre>
+<p>The simplest strategy is to always pick the token with the highest probability. This is called greedy decoding, and it is what <code>do_sample=False</code> selects. The demo runs the same prompt twice with identical settings.</p>
+<pre><code class="language-python">{"label": "Greedy / temperature=0  [run 1]", "kwargs": {"do_sample": False}},
+{"label": "Greedy / temperature=0  [run 2]", "kwargs": {"do_sample": False}},
+</code></pre>
+<p>Both runs produce identical output. That is the defining property of greedy decoding: given the same prompt and the same model weights, the output is completely deterministic. There is no randomness anywhere in the computation. This makes greedy decoding reproducible and easy to debug, which is why it is the default for tasks like translation or summarisation where there is typically one correct answer. Its weakness is that it tends toward repetitive, formulaic text — the most probable token at each step is often also the most expected one, and the model can get trapped following its own highest-probability paths into loops.</p>
+<h2 id="temperature"><a class="header" href="#temperature">Temperature</a></h2>
+<pre><code class="language-python">{"do_sample": True, "temperature": 0.1},
+{"do_sample": True, "temperature": 1.0},
+{"do_sample": True, "temperature": 2.0},
+</code></pre>
+<p>Temperature is a scalar that divides every logit before the softmax is applied. The modified formula is:</p>
+<p>\[ p_i = \frac{e^{x_i / T}}{\sum_{j} e^{x_j / T}} \]</p>
+<p>where \(T\) is the temperature and \(x_i\) is the raw logit for token \(i\). When \(T &lt; 1\), dividing by a number less than one makes each logit larger in magnitude. Because the softmax uses exponentials, this amplifies the differences between tokens: already-probable tokens become even more dominant, and unlikely tokens become nearly impossible. The output concentrates around the model’s top choices and becomes more predictable — and more prone to repetition. When \(T &gt; 1\), the logits shrink toward zero, softmax differences flatten, and the probability mass spreads more evenly across the vocabulary. Lower-ranked tokens get a larger share of the probability, and the output becomes more varied — at the cost of sometimes choosing tokens that are implausible in context.</p>
+<p>At <code>temperature=0</code> the difference between logits becomes infinite in the limit, and the distribution collapses to a point mass on the single highest-probability token — equivalent to greedy decoding. At very high temperatures the distribution approaches uniform, meaning every token in the vocabulary has roughly equal probability regardless of context.</p>
+<p>Running the demo shows this directly. At <code>temperature=0.1</code> the two runs with the same prompt produce nearly identical output — the distribution is so concentrated that the same token wins almost every time. At <code>temperature=1.0</code> the two runs diverge. At <code>temperature=2.0</code> the output may be surprising, non sequitur, or grammatically strange, because the model is now sampling from a flattened distribution that gives real probability to tokens it would ordinarily never choose.</p>
+<h2 id="top-k-sampling"><a class="header" href="#top-k-sampling">Top-k sampling</a></h2>
+<pre><code class="language-python">{"do_sample": True, "temperature": 1.0, "top_k": 1},
+{"do_sample": True, "temperature": 1.0, "top_k": 5},
+{"do_sample": True, "temperature": 1.0, "top_k": 200},
+</code></pre>
+<p>Top-k sampling addresses a specific problem with pure temperature sampling: even at moderate temperatures, the long tail of the vocabulary — tokens with very low probability — retains some nonzero probability mass, and occasionally one of them gets sampled. Most of those tokens are genuinely bad choices that no amount of creativity justifies.</p>
+<p>Top-k solves this by discarding all but the \(k\) most probable tokens before sampling. The logits of the remaining vocabulary are set to negative infinity, which makes their softmax probability exactly zero. Sampling then proceeds over just the \(k\) survivors. When \(k = 1\), only the single best token survives and the result is identical to greedy decoding. When \(k\) equals the full vocabulary size, nothing is filtered and the result is identical to unconstrained sampling. Values between those extremes offer a tunable trade-off.</p>
+<p>The weakness of top-k is that it uses a fixed count regardless of the shape of the distribution. At a position where the model is highly confident — the next token is almost certainly “the” — a top-k of 50 still allows 49 other tokens to compete, including plausible but wrong ones. At a position where the model is genuinely uncertain — many continuations are reasonable — a top-k of 5 may be too restrictive. The right value of \(k\) is context-dependent in a way the parameter cannot capture.</p>
+<h2 id="top-p-nucleus-sampling"><a class="header" href="#top-p-nucleus-sampling">Top-p (nucleus) sampling</a></h2>
+<pre><code class="language-python">{"do_sample": True, "temperature": 1.0, "top_p": 0.1},
+{"do_sample": True, "temperature": 1.0, "top_p": 0.95},
+</code></pre>
+<p>Top-p sampling, introduced by Holtzman et al. in 2019, solves the rigidity of top-k by filtering based on cumulative probability mass rather than a fixed count. Tokens are ranked from most to least probable, and the model keeps adding tokens to the candidate set until their cumulative probability exceeds the threshold \(p\). All remaining tokens are set to zero probability. Sampling then proceeds over the nucleus — the smallest set of tokens that together account for at least \(p\) of the probability mass.</p>
+<p>The result is a candidate set that adapts to the situation. When the model is confident, probability mass is concentrated in a few tokens and the nucleus is small — perhaps two or three tokens — even if \(p = 0.95\). When the model is uncertain, the mass is spread across many tokens and the nucleus expands accordingly. The number of candidates is not fixed; it is determined by the shape of the distribution at each step.</p>
+<p>In the demo, <code>top_p=0.1</code> produces very conservative output: only the tokens that together account for the first 10% of probability mass are considered, which typically means just one or two tokens. <code>top_p=0.95</code> allows a much richer set of candidates. Most production systems use values between 0.9 and 0.95 as a reasonable default.</p>
+<h2 id="what-to-observe-when-you-run-it"><a class="header" href="#what-to-observe-when-you-run-it">What to observe when you run it</a></h2>
+<p>The most informative thing to look for is the greedy runs first. Their identical outputs confirm that when sampling is disabled the computation is purely deterministic. Then compare the two <code>temperature=1.0</code> runs — they should differ, sometimes substantially. That difference comes entirely from the randomness introduced by sampling, not from anything in the model itself.</p>
+<p>The comparison between <code>top_k=1</code> and <code>do_sample=False</code> is also instructive: they produce identical output, which confirms that restricting the candidate pool to a single token is the same as always taking the argmax. And the comparison between <code>top_p=0.1</code> and <code>top_p=0.95</code> shows nucleus sampling adapting to different thresholds — the conservative setting staying close to the model’s top choices, the permissive setting occasionally venturing further.</p>
+<p>None of the math underlying these strategies has been implemented here — <code>model.generate</code> handles all of it. Section 1.4 introduces the shared <code>SamplingParams</code> dataclass that every subsequent chapter uses to carry these parameters through the system. Chapter 3 implements the sampling logic from scratch, making the formulas above executable and inspectable.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="contracts"><a class="header" href="#contracts">Contracts</a></h1>
+<p>Before wiring an engine into a server, or a server into a benchmark, it helps to agree on what data flows between them. In software, that agreement is called a contract — a definition of the types that cross a boundary, making it possible for each side to be written, tested, and replaced independently.</p>
+<p>The three types introduced in this section appear in every single chapter of this book. They are defined once in <code>shared/</code> and never change. What changes from chapter to chapter is the engine that implements them. Chapter 2 replaces the HuggingFace call inside <code>generate()</code> with our own loop. Chapter 4 adds a KV cache. Chapter 9 adds continuous batching. In every case, the surrounding code — the server, the benchmark harness, the metrics display — stays identical because the contracts stay identical.</p>
+<pre><code class="language-python">from shared.metrics import RequestMetrics
+from shared.result import GenerateResult
+from shared.sampling_params import SamplingParams
+</code></pre>
+<p>Run it:</p>
+<pre><code>python 03_contracts.py
+</code></pre>
+<h2 id="samplingparams--how-should-tokens-be-chosen"><a class="header" href="#samplingparams--how-should-tokens-be-chosen">SamplingParams — how should tokens be chosen?</a></h2>
+<pre><code class="language-python">@dataclass
+class SamplingParams:
+    temperature: float = 0.0
+    top_k:       int   = -1
+    top_p:       float = 1.0
+    ignore_eos:  bool  = False
+    max_tokens:  int   = 1024
+
+    @property
+    def is_greedy(self) -&gt; bool:
+        return (self.temperature &lt;= 0.0 or self.top_k == 1) and self.top_p == 1.0
+</code></pre>
+<p><code>SamplingParams</code> is a dataclass that carries the sampling configuration for a single request. It travels from the caller of <code>generate()</code> down through the engine to the sampler that picks each output token.</p>
+<p>The defaults are deliberately conservative. <code>temperature=0.0</code> means greedy decoding — always take the most probable token, no randomness. <code>top_k=-1</code> means top-k filtering is disabled. <code>top_p=1.0</code> means all tokens remain in the candidate pool. Together, these defaults produce deterministic, reproducible output with a single line:</p>
+<pre><code class="language-python">params = SamplingParams()   # greedy
+</code></pre>
+<p>To switch to nucleus sampling with moderate creativity, the caller constructs:</p>
+<pre><code class="language-python">params = SamplingParams(temperature=0.8, top_p=0.95)
+</code></pre>
+<p>The <code>is_greedy</code> property gives every engine a single place to check whether randomness is needed before calling the sampler, avoiding the cost of multinomial sampling when the result is predetermined. If both <code>top_p</code> is 1.0 and temperature is zero (or top_k is 1), the distribution has already collapsed to a point mass and sampling adds nothing.</p>
+<p>The reason to put these parameters in a dataclass rather than passing them as individual keyword arguments is consistency. As the number of sampling strategies grows — minimum-p sampling, repetition penalty, beam search — the function signature stays the same. The caller constructs a <code>SamplingParams</code> object; the engine receives it; the sampler reads from it. Adding a new field to the dataclass does not break any existing call site.</p>
+<h2 id="requestmetrics--how-do-we-measure-performance"><a class="header" href="#requestmetrics--how-do-we-measure-performance">RequestMetrics — how do we measure performance?</a></h2>
+<pre><code class="language-python">@dataclass
+class RequestMetrics:
+    throughput:    float
+    input_tokens:  int
+    output_tokens: int
+    ttft_ms:       float = 0.0   # 0.0 = not measured
+    tpot_ms:       float = 0.0   # 0.0 = not measured
+</code></pre>
+<p><code>RequestMetrics</code> records what happened during a single <code>generate()</code> call. It lives inside every <code>GenerateResult</code> and is serialised into the server’s HTTP response under a <code>metrics</code> key.</p>
+<p>The three required fields are always present. <code>throughput</code> is output tokens per second — the most direct measure of how fast the engine is running. <code>input_tokens</code> and <code>output_tokens</code> are the prompt and completion lengths, which together determine how much work was done and provide the numbers that go into the OpenAI-compatible <code>usage</code> field of the response.</p>
+<p>The two optional fields — <code>ttft_ms</code> and <code>tpot_ms</code> — default to <code>0.0</code> and are only included in the serialised output when non-zero. TTFT (time to first token) measures how long the prefill phase took: the delay between receiving the request and producing the first output token, which is what the user experiences as initial latency. TPOT (time per output token) measures the average duration of each decode step, which determines how fast text streams to the user once generation has begun.</p>
+<p>In Chapter 1, both fields stay at zero. HuggingFace runs prefill and decode as a single opaque call, so there is no way to separate them from the outside. Chapter 2 builds the loop step by step, at which point timing each phase becomes straightforward and both fields get populated. The <code>0.0</code> default is not a placeholder — it is a signal that the measurement was not available, and <code>as_dict()</code> is designed to omit it cleanly:</p>
+<pre><code class="language-python">def as_dict(self) -&gt; dict:
+    d = {
+        "throughput":    round(self.throughput, 1),
+        "input_tokens":  self.input_tokens,
+        "output_tokens": self.output_tokens,
+    }
+    if self.ttft_ms:
+        d["ttft_ms"] = round(self.ttft_ms, 2)
+    if self.tpot_ms:
+        d["tpot_ms"] = round(self.tpot_ms, 2)
+    return d
+</code></pre>
+<p>A Ch01 engine produces <code>{"throughput": 12.5, "input_tokens": 20, "output_tokens": 40}</code>. A Ch02 engine produces the same dict extended with <code>"ttft_ms"</code> and <code>"tpot_ms"</code>. The server code that formats the response never needs to know which chapter it is running; it calls <code>result.metrics.as_dict()</code> and gets back whatever the engine was able to measure.</p>
+<h2 id="generateresult--the-envelope"><a class="header" href="#generateresult--the-envelope">GenerateResult — the envelope</a></h2>
+<pre><code class="language-python">@dataclass
+class GenerateResult:
+    text:       str
+    output_ids: list[int]
+    metrics:    RequestMetrics
+</code></pre>
+<p><code>GenerateResult</code> is the return type of every <code>generate()</code> call in the book. It is deliberately minimal: three fields, no methods, no logic.</p>
+<p><code>text</code> is the decoded output string — what gets shown to the user or returned in the HTTP response body. <code>output_ids</code> is the raw list of generated token IDs, not including the prompt tokens. Keeping the raw IDs alongside the text matters because some later chapters — speculative decoding in Chapter 13, prefix caching in Chapter 11 — need to reason about the token sequence directly, not just the string it decodes to. <code>metrics</code> holds a <code>RequestMetrics</code> instance, or any subclass of it.</p>
+<p>That last point — “or any subclass” — is what makes the design extensible. Chapter 13 introduces <code>SpecDecodeMetrics</code>, which inherits from <code>RequestMetrics</code> and adds two additional fields:</p>
+<pre><code class="language-python">@dataclass
+class SpecDecodeMetrics(RequestMetrics):
+    tokens_proposed: int = 0
+    tokens_accepted: int = 0
+
+    @property
+    def acceptance_rate(self) -&gt; float:
+        return self.tokens_accepted / max(self.tokens_proposed, 1)
+</code></pre>
+<p>A Chapter 13 engine returns a <code>GenerateResult</code> with a <code>SpecDecodeMetrics</code> inside it. The server still calls <code>result.metrics.as_dict()</code>, and because <code>SpecDecodeMetrics</code> overrides <code>as_dict()</code> to include the extra fields, the acceptance rate appears in the response automatically. No code outside the engine changes.</p>
+<h2 id="the-data-flow"><a class="header" href="#the-data-flow">The data flow</a></h2>
+<p>Putting the three types together:</p>
+<pre><code>prompt (str)
+    │
+    ▼
+engine.generate(prompt, max_new_tokens, SamplingParams)
+    │
+    ▼
+GenerateResult
+    ├── text        → returned to caller / shown in HTTP response
+    ├── output_ids  → token IDs, kept for chapters that need them
+    └── metrics     → RequestMetrics.as_dict() → "metrics" in JSON
+</code></pre>
+<p>Every chapter from here to the end of the book follows this shape. The prompt goes in, a <code>GenerateResult</code> comes out. What varies is everything that happens in between — and the contracts above are what make it possible to swap that middle out without touching anything else.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-engine"><a class="header" href="#the-engine">The Engine</a></h1>
+<p>Every chapter of this book centres on one class: the engine. Its job is to accept a prompt string and return a <code>GenerateResult</code>. What changes from chapter to chapter is how it produces that result — which data structures it uses internally, how it schedules work, whether it caches past computation. What never changes is the interface the engine exposes.</p>
+<p>This section introduces <code>BaselineEngine</code>, the Chapter 1 implementation, and the abstract base class it fulfils.</p>
+<p>Run it:</p>
+<pre><code>python 04_engine.py
+</code></pre>
+<h2 id="the-interface--baseofflineengine"><a class="header" href="#the-interface--baseofflineengine">The interface — <code>BaseOfflineEngine</code></a></h2>
+<pre><code class="language-python">class BaseOfflineEngine(ABC):
+
+    @abstractmethod
+    def generate(
+        self,
+        prompt:         str,
+        max_new_tokens: int,
+        params:         SamplingParams | None = None,
+    ) -&gt; GenerateResult: ...
+
+    @abstractmethod
+    def generate_batch(
+        self,
+        prompts:        list[str],
+        max_new_tokens: int,
+        params:         SamplingParams | None = None,
+    ) -&gt; list[GenerateResult]: ...
+</code></pre>
+<p><code>BaseOfflineEngine</code> is an abstract base class — a class that can never be instantiated on its own but enforces that any subclass provides specific methods. In Python, this guarantee is expressed with the <code>@abstractmethod</code> decorator: attempting to instantiate a class that inherits from <code>BaseOfflineEngine</code> without implementing both <code>generate</code> and <code>generate_batch</code> raises a <code>TypeError</code> at the moment of construction, before any inference code runs. The error is caught early, close to where the contract was broken, rather than failing silently during a benchmark run.</p>
+<p>The design choice of an abstract base class over a plain protocol or duck-typed interface matters for this book in particular. Each chapter defines its own engine class. The FastAPI server in <code>05_server.py</code> is built by a shared factory function (<code>make_app</code>) that accepts any <code>BaseOfflineEngine</code> and returns a working application. The benchmark scripts in <code>06_benchmark_offline.py</code> call <code>engine.generate()</code> directly. None of that code needs to know which chapter’s engine it is talking to — the abstract base class is the contract that makes that substitution safe. This is the same pattern production inference systems use: vLLM’s <code>LLMEngine</code>, SGLang’s <code>LLM</code> class, and TGI’s <code>TextGenerationInterface</code> are all variations of the same idea.</p>
+<h2 id="loading-the-model"><a class="header" href="#loading-the-model">Loading the model</a></h2>
+<pre><code class="language-python">def __init__(self, model_name: str = MODEL_NAME):
+    self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+    self.model     = (
+        AutoModelForCausalLM
+        .from_pretrained(model_name, torch_dtype=torch.float32)
+        .to(DEVICE)
+        .eval()
+    )
+</code></pre>
+<p><code>__init__</code> loads the model exactly once, when the engine is constructed. This matters because loading a multi-gigabyte checkpoint from disk and moving its weights to the GPU can take several seconds; doing it once and keeping the model resident in memory for the lifetime of the engine is the pattern every production system follows.</p>
+<p><code>torch_dtype=torch.float32</code> asks HuggingFace to load weights in 32-bit floating point. For a small teaching model this is fine. In production, you would typically pass <code>torch.float16</code> or <code>torch.bfloat16</code> to halve the memory footprint. Chapter 12 covers quantisation, which goes further still.</p>
+<p><code>.to(DEVICE).eval()</code> moves all weight tensors from CPU RAM to the target device and switches the model from training mode to inference mode. In training mode, certain layers — <code>BatchNorm</code>, <code>Dropout</code> — behave differently: dropout randomly zeros activations during the forward pass, and batch norm tracks running statistics. Calling <code>.eval()</code> disables both. For a transformer used purely for inference, <code>.eval()</code> is always correct. Omitting it is a common source of non-deterministic outputs that are difficult to debug.</p>
+<h2 id="the-generate-method"><a class="header" href="#the-generate-method">The generate method</a></h2>
+<pre><code class="language-python">def generate(
+    self,
+    prompt:         str,
+    max_new_tokens: int,
+    params:         SamplingParams | None = None,
+) -&gt; GenerateResult:
+    params    = params or SamplingParams()
+    input_ids = self.tokenizer.encode(prompt, return_tensors="pt").to(DEVICE)
+
+    t0 = time.perf_counter()
+    with torch.no_grad():
+        # ← Chapter 2 replaces this with our own token-by-token loop
+        output_ids = self.model.generate(
+            input_ids,
+            max_new_tokens=max_new_tokens,
+            do_sample=not params.is_greedy,
+            temperature=params.temperature if not params.is_greedy else 1.0,
+            top_p=params.top_p,
+        )
+    elapsed_s = time.perf_counter() - t0
+
+    new_ids = output_ids[0][input_ids.shape[1]:]
+    text    = self.tokenizer.decode(new_ids, skip_special_tokens=True)
+    n_tok   = len(new_ids)
+</code></pre>
+<p>The generate method is five steps in one place: parameter defaulting, tokenisation, inference, output slicing, and metrics construction.</p>
+<p>If the caller passes <code>None</code> for <code>params</code>, the line <code>params = params or SamplingParams()</code> substitutes the default <code>SamplingParams</code> object, which uses greedy decoding. This means callers that do not care about sampling get deterministic output without any extra code.</p>
+<p>The prompt string is then encoded to a tensor of token IDs and sent to the same device as the model weights. <code>return_tensors="pt"</code> produces a PyTorch tensor with a batch dimension of one, so <code>input_ids</code> has shape <code>[1, prompt_length]</code>.</p>
+<p>The <code>torch.no_grad()</code> context manager tells PyTorch to skip building the computation graph — the record of operations needed to compute gradients during backpropagation. During inference no gradient is ever needed, so building the graph would waste both memory and time. On a long prompt the difference is measurable. Forgetting <code>torch.no_grad()</code> is one of the most common sources of out-of-memory errors in inference code.</p>
+<p>Inside the context, <code>self.model.generate()</code> runs HuggingFace’s autoregressive loop. The loop feeds the model the growing sequence of tokens, one step at a time, extracts the logit vector for the last position, applies the requested sampling strategy — greedy argmax, temperature scaling, nucleus filtering — and appends the chosen token back onto the sequence. It repeats until <code>max_new_tokens</code> tokens have been generated or an end-of-sequence token appears. The entire loop is hidden inside a single function call. This is what makes Chapter 1 a black box: the loop exists, but we cannot see inside it. Chapter 2 rewrites it from scratch so that each step is visible.</p>
+<p>The <code>do_sample</code> flag translates <code>SamplingParams.is_greedy</code> into HuggingFace’s vocabulary: <code>False</code> means greedy, <code>True</code> enables multinomial sampling. When <code>do_sample=True</code>, the <code>temperature</code> and <code>top_p</code> parameters are forwarded from <code>SamplingParams</code>. When <code>do_sample=False</code>, temperature is forced to <code>1.0</code> because it has no effect in greedy mode and HuggingFace raises a warning if it is set to anything else.</p>
+<p>After the call, <code>output_ids[0]</code> strips the batch dimension, giving a one-dimensional tensor of the complete sequence — prompt tokens followed by generated tokens. Slicing from <code>input_ids.shape[1]</code> forward isolates only the generated part. The prompt tokens were already shown to the user; they should not appear in the output string.</p>
+<h2 id="returning-a-generateresult"><a class="header" href="#returning-a-generateresult">Returning a GenerateResult</a></h2>
+<pre><code class="language-python">    return GenerateResult(
+        text       = text,
+        output_ids = new_ids.tolist(),
+        metrics    = RequestMetrics(
+            throughput    = n_tok / max(elapsed_s, 1e-9),
+            input_tokens  = input_ids.shape[1],
+            output_tokens = n_tok,
+        ),
+    )
+</code></pre>
+<p>The <code>GenerateResult</code> envelope is constructed with the three fields introduced in <code>03_contracts.py</code>. <code>output_ids</code> calls <code>.tolist()</code> to convert the PyTorch tensor into a plain Python list, because <code>GenerateResult</code> is a plain dataclass that knows nothing about PyTorch and should not.</p>
+<p><code>RequestMetrics</code> is constructed with only the three required fields. <code>throughput</code> is <code>n_tok / elapsed_s</code> — output tokens divided by wall-clock seconds. The <code>max(elapsed_s, 1e-9)</code> guard prevents a division by zero on extremely fast machines or when the token count is very small. <code>ttft_ms</code> and <code>tpot_ms</code> are intentionally absent: HuggingFace runs prefill and decode as a single fused call, so the moment the first token was produced is invisible from outside <code>model.generate()</code>. Chapter 2 builds the loop step by step, which makes both timings accessible.</p>
+<h2 id="generate_batch"><a class="header" href="#generate_batch">generate_batch</a></h2>
+<pre><code class="language-python">def generate_batch(
+    self,
+    prompts:        list[str],
+    max_new_tokens: int,
+    params:         SamplingParams | None = None,
+) -&gt; list[GenerateResult]:
+    return [self.generate(p, max_new_tokens, params) for p in prompts]
+</code></pre>
+<p><code>generate_batch</code> is a sequential loop over <code>generate</code>. Each prompt is processed one at a time, with no parallelism. This implementation satisfies the interface contract — the method exists and returns the right type — but it does not exploit any of the efficiency opportunities that batching makes possible. On a GPU, the compute units sit mostly idle while the model processes a single short sequence; running multiple sequences in parallel would keep them busy and amortise the fixed cost of a forward pass across many tokens simultaneously. Chapter 5 replaces this loop with true static batching. Chapter 9 extends that to continuous batching, which handles requests of different lengths arriving at different times.</p>
+<h2 id="running-the-engine"><a class="header" href="#running-the-engine">Running the engine</a></h2>
+<p>When run as a script, <code>04_engine.py</code> constructs the engine, runs one greedy generation call, and prints the result:</p>
+<pre><code>[engine] loading arnir0/Tiny-LLM on cpu ...
+[engine] ready
+
+[Prompt]
+  According to all known laws of aviation, ...
+
+[Output]
+  The bee flies because it does not know it cannot.
+
+[Metrics]
+  throughput      12.3
+  input_tokens    18
+  output_tokens   40
+</code></pre>
+<p>The engine is now a fully functional unit. The next step is to wrap it in an HTTP server so that any client — a benchmark script, a web UI, another service — can call it over the network using a standard API.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-server"><a class="header" href="#the-server">The Server</a></h1>
+<p>The engine from the previous section is a Python object. Anything that wants to use it must be Python code running in the same process. Wrapping the engine in an HTTP server removes that constraint: any client anywhere on the network — a curl command, a Python script, a browser, another microservice — can call the engine by making an ordinary HTTP POST request. This is how every production LLM deployment works. OpenAI’s API, Anthropic’s API, and self-hosted systems like vLLM and SGLang all expose the same basic shape: a POST endpoint that accepts a JSON body describing the request and returns a JSON body containing the generated text.</p>
+<p>This section builds that server in roughly twenty lines of application code, reusing a factory from <code>shared/server.py</code> that every chapter server will use unchanged.</p>
+<p>Run it:</p>
+<pre><code>uvicorn 05_server:app --port 8001
+</code></pre>
+<p>Test it (in a second terminal):</p>
+<pre><code class="language-bash">curl http://localhost:8001/v1/chat/completions \
+     -H "Content-Type: application/json" \
+     -d '{"messages":[{"role":"user","content":"Hello"}],"max_tokens":50}'
+</code></pre>
+<h2 id="fastapi-and-uvicorn"><a class="header" href="#fastapi-and-uvicorn">FastAPI and uvicorn</a></h2>
+<pre><code class="language-python">from fastapi import FastAPI
+from pydantic import BaseModel
+</code></pre>
+<p>FastAPI is a Python web framework built on two foundations. The networking layer is handled by uvicorn, an ASGI server. ASGI — Asynchronous Server Gateway Interface — is the protocol that connects a Python application to the outside world: uvicorn opens a TCP socket, waits for HTTP connections, reads each request from the wire, and hands control to FastAPI as a structured Python object. FastAPI then inspects the request, routes it to the right handler function, validates the request body with Pydantic, calls the handler, serialises the return value back to JSON, and instructs uvicorn to write the response bytes to the socket.</p>
+<p>For our purposes the important practical consequence is that uvicorn and FastAPI are separate processes of concern. Running <code>uvicorn 05_server:app --port 8001</code> tells uvicorn to import the <code>app</code> object from <code>05_server.py</code> and start listening on port 8001. The application code never calls <code>accept()</code> or manages sockets; it only defines handlers.</p>
+<h2 id="request-model"><a class="header" href="#request-model">Request model</a></h2>
+<pre><code class="language-python">class Message(BaseModel):
+    role:    str
+    content: str
+
+class ChatRequest(BaseModel):
+    model:       str   = "default"
+    messages:    list[Message]
+    max_tokens:  int   = 100
+    temperature: float = 0.0
+    top_p:       float = 1.0
+</code></pre>
+<p><code>ChatRequest</code> is a Pydantic <code>BaseModel</code>. Pydantic models declare their fields as class-level annotations with optional defaults. When FastAPI receives an incoming POST body, it deserialises the raw JSON bytes and attempts to construct a <code>ChatRequest</code> from them. If any required field is missing, if a field’s value cannot be coerced to the declared type, or if a list element does not match the inner type, Pydantic raises a <code>ValidationError</code> and FastAPI returns a <code>422 Unprocessable Entity</code> response to the client automatically. The handler function is never called. This means validation is essentially free from the handler’s perspective: by the time the function body runs, every field is guaranteed to be present and correctly typed.</p>
+<p>The field names follow the OpenAI chat completions API convention. <code>messages</code> is a list of <code>Message</code> objects, each with a <code>role</code> (<code>"user"</code>, <code>"assistant"</code>, <code>"system"</code>) and a <code>content</code> string. The convention exists because the ecosystem around LLM APIs — client libraries, proxies, benchmarking tools, evaluation harnesses — speaks this language. Matching it means our server is compatible with any tool that targets OpenAI’s endpoint, which in Chapter 6 lets the benchmark script treat our server identically to a production one.</p>
+<h2 id="the-make_app-factory"><a class="header" href="#the-make_app-factory">The make_app factory</a></h2>
+<pre><code class="language-python">def make_app(engine: BaseOfflineEngine) -&gt; FastAPI:
+    app  = FastAPI()
+    _uid = [0]
+
+    @app.post("/v1/chat/completions")
+    def chat(req: ChatRequest) -&gt; dict:
+        prompt = req.messages[-1].content
+        params = SamplingParams(
+            temperature=req.temperature,
+            top_p=req.top_p,
+            max_tokens=req.max_tokens,
+        )
+        result: GenerateResult = engine.generate(prompt, req.max_tokens, params)
+        _uid[0] += 1
+        return _format_response(result, req, uid=_uid[0])
+
+    @app.get("/health")
+    def health() -&gt; dict:
+        return {"status": "ok"}
+
+    return app
+</code></pre>
+<p><code>make_app</code> is a factory function: it takes an engine, builds a FastAPI application wired to that engine, and returns the application object. The engine is captured in the closure over the <code>chat</code> handler. This is the same pattern used by <code>shared/server.py</code> for every chapter in the book — the factory is written once and never changes; only the engine passed to it changes.</p>
+<p>The <code>chat</code> handler extracts the user’s message from the last element of the <code>messages</code> list (<code>req.messages[-1].content</code>). Multi-turn conversation history — earlier messages in the list — is not passed to the engine in Chapter 1. Building a proper multi-turn engine requires concatenating or summarising context, which is a topic for later chapters. For now, the server behaves as a stateless single-turn responder.</p>
+<p><code>SamplingParams</code> is constructed from the request fields, translating the HTTP API’s vocabulary into the internal contract. The <code>engine.generate()</code> call is synchronous and blocking: the handler thread calls into the engine, waits until the model produces all <code>max_tokens</code> output tokens, and only then returns the result. This works correctly for a single concurrent request. It becomes a bottleneck under load — a second request arriving while the first is generating must wait in a queue — and Chapter 9 addresses this by separating the inference loop from the HTTP handler using asynchronous scheduling.</p>
+<p><code>_uid</code> is a module-level list containing a single integer used as a request counter. A list rather than a bare integer is used because Python closures over a name, not a value: reassigning an integer with <code>_uid = _uid + 1</code> inside the closure would create a new local binding, leaving the outer name unchanged. Mutating the first element of a list (<code>_uid[0] += 1</code>) modifies the existing object, which the closure sees correctly. In production code a threading lock or an atomic counter would be appropriate; here a simple integer is sufficient because the server handles one request at a time.</p>
+<p>The <code>/health</code> endpoint returns a trivial JSON object. <code>06_benchmark_online.py</code> polls this endpoint after starting the server process to confirm it is ready before sending benchmark requests. Any HTTP 200 response from <code>/health</code> signals readiness.</p>
+<h2 id="the-response-format"><a class="header" href="#the-response-format">The response format</a></h2>
+<pre><code class="language-python">def _format_response(result: GenerateResult, req: ChatRequest, uid: int) -&gt; dict:
+    m = result.metrics
+    return {
+        "id":     f"cmpl-{uid}",
+        "object": "chat.completion",
+        "choices": [{
+            "index":         0,
+            "message":       {"role": "assistant", "content": result.text},
+            "finish_reason": "stop",
+        }],
+        "usage": {
+            "prompt_tokens":     m.input_tokens,
+            "completion_tokens": m.output_tokens,
+            "total_tokens":      m.input_tokens + m.output_tokens,
+        },
+        "metrics": m.as_dict(),
+    }
+</code></pre>
+<p>The response follows the OpenAI chat completions object shape. <code>id</code> is a unique identifier per completion — benchmark scripts and clients use it to match responses to requests. <code>object</code> is a fixed string identifying the response type. <code>choices</code> is a list of completions; we always return exactly one, at <code>index: 0</code>. Each choice wraps the generated text in a <code>message</code> object with <code>role: "assistant"</code> and sets <code>finish_reason: "stop"</code> to indicate the model reached <code>max_new_tokens</code> without an error or a content filter triggering.</p>
+<p><code>usage</code> reports token counts using OpenAI’s field names: <code>prompt_tokens</code>, <code>completion_tokens</code>, and their sum as <code>total_tokens</code>. These values come directly from <code>RequestMetrics.input_tokens</code> and <code>RequestMetrics.output_tokens</code>, which the engine measured during generation. Tools that consume the response — cost calculators, rate limiters, evaluation harnesses — depend on this field being accurate.</p>
+<p><code>metrics</code> is a non-standard extension, absent from the OpenAI specification. It surfaces the full <code>RequestMetrics.as_dict()</code> output — throughput and token counts for Chapter 1 — so that clients and benchmark scripts can read performance data from the HTTP response without needing a separate metrics endpoint. Future chapters add <code>ttft_ms</code> and <code>tpot_ms</code> to <code>RequestMetrics</code>; when they do, those fields appear in <code>metrics</code> automatically because <code>as_dict()</code> includes them conditionally.</p>
+<h2 id="wiring-the-engine-to-the-server"><a class="header" href="#wiring-the-engine-to-the-server">Wiring the engine to the server</a></h2>
+<pre><code class="language-python">engine = BaselineEngine()
+app    = make_app(engine)
+</code></pre>
+<p>These two lines are the entire chapter-specific portion of <code>05_server.py</code>. The engine is constructed at module import time, meaning the model is loaded when uvicorn imports the module, before the first request arrives. <code>make_app</code> wraps it. The resulting <code>app</code> object is what uvicorn holds a reference to and calls for every incoming HTTP request.</p>
+<p><code>BaselineEngine</code> appears in full in <code>05_server.py</code> rather than being imported from <code>04_engine.py</code> because this file is designed to be read as a standalone introduction to the engine-plus-server pattern: everything a reader needs to understand how the server works is visible in one file. The thin <code>engine.py</code> wrapper in the same directory uses <code>importlib</code> to import <code>BaselineEngine</code> from <code>04_engine.py</code> for the benchmark scripts, which need a clean import path. Both point to the same implementation; neither is a copy of different code.</p>
+<p>A <code>curl</code> response from this server looks like:</p>
+<pre><code class="language-json">{
+  "id": "cmpl-1",
+  "object": "chat.completion",
+  "choices": [{
+    "index": 0,
+    "message": {"role": "assistant", "content": "The bee flies anyway."},
+    "finish_reason": "stop"
+  }],
+  "usage": {
+    "prompt_tokens": 18,
+    "completion_tokens": 40,
+    "total_tokens": 58
+  },
+  "metrics": {
+    "throughput": 12.3,
+    "input_tokens": 18,
+    "output_tokens": 40
+  }
+}
+</code></pre>
+<p>The next step is to measure how fast this server actually runs — both directly, by calling the engine in-process, and over the network, by sending HTTP requests to the running server.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-benchmark"><a class="header" href="#the-benchmark">The Benchmark</a></h1>
+<p>Knowing that an engine produces correct output is not enough. Every chapter of this book introduces a new engine implementation, and the only way to know whether a change is actually faster is to measure it systematically, with the same methodology, against the same numbers. This section builds the measurement tooling and produces the baseline numbers that every subsequent chapter will try to beat.</p>
+<p>There are two benchmark scripts. <code>06_benchmark_offline.py</code> calls the engine directly in-process. <code>06_benchmark_online.py</code> sends HTTP requests to a running server. Both produce the same table of numbers; the difference between them is the overhead of the network stack.</p>
+<p>Run offline:</p>
+<pre><code>python 06_benchmark_offline.py
+</code></pre>
+<p>Run online (server is launched and stopped automatically):</p>
+<pre><code>python 06_benchmark_online.py
+</code></pre>
+<h2 id="what-to-measure"><a class="header" href="#what-to-measure">What to measure</a></h2>
+<p>A benchmark number is only useful if you understand what it is measuring and what it is not. Three quantities matter for a single-user, single-request system like Chapter 1:</p>
+<p><strong>Throughput (tokens per second)</strong> is the rate at which the model produces output tokens. For a generative model, this is <code>output_tokens / elapsed_seconds</code>. It is the primary number that every chapter optimisation targets. Higher is better.</p>
+<p><strong>Requests per second</strong> is <code>1 / avg_wall_seconds</code>. For a single-threaded server, this is simply the reciprocal of average latency. It becomes independently interesting in Chapter 9, where continuous batching allows multiple requests to overlap, decoupling throughput from single-request latency.</p>
+<p><strong>Wall time per request</strong> is the total time from calling <code>engine.generate()</code> (or sending the HTTP request) to receiving the complete result. It is the number the end user experiences as latency. Because Chapter 1 generates all tokens before returning, wall time grows linearly with <code>max_new_tokens</code>.</p>
+<p><strong>Time-to-first-token (TTFT)</strong> and <strong>time-per-output-token (TPOT)</strong> are absent from Chapter 1. HuggingFace’s <code>model.generate()</code> runs prefill and decode as a single fused call and returns only after all tokens are produced; the moment the first token was generated is not observable from outside the call. Chapter 2 builds the loop step by step and populates both. The benchmark infrastructure tracks them in <code>BenchStats</code> with <code>0.0</code> defaults and omits them from the printed table until they are non-zero.</p>
+<h2 id="warmup-runs"><a class="header" href="#warmup-runs">Warmup runs</a></h2>
+<pre><code class="language-python">for _ in range(n_warmup):
+    engine.generate(prompt, max_tokens, params)
+</code></pre>
+<p>The first few calls to <code>engine.generate()</code> are always slower than subsequent ones. Several independent effects cause this. PyTorch compiles CUDA kernels lazily: the first time a particular operation is encountered with a particular tensor shape, PyTorch compiles and caches a CUDA kernel for it. That compilation can take tens or hundreds of milliseconds. On CPU, the OS page-fault mechanism brings model weight pages into RAM only as they are accessed; the first forward pass touches every weight page for the first time. Python’s import machinery and interpreter warm up. On subsequent calls, compiled kernels are cached, weights are resident in memory, and the interpreter is in a steady state.</p>
+<p>Warmup runs are discarded. They are not included in any computed average. The number of warmup runs is configured by <code>WARMUP_RUNS</code> in <code>shared/config.py</code> (default: 3), which is enough to get past both kernel compilation and page faults on the models used in this book. Production benchmarks like those published by NVIDIA NIM use a dedicated warmup phase for the same reason, though at larger scale they may require dozens of iterations.</p>
+<h2 id="benchstats"><a class="header" href="#benchstats">BenchStats</a></h2>
+<pre><code class="language-python">@dataclass
+class BenchStats:
+    req_per_s:     float
+    tok_per_s:     float
+    wall_ms:       float
+    output_tokens: float
+    n_runs:        int
+    ttft_ms:       float       = 0.0
+    tpot_ms:       float       = 0.0
+    wall_times:    list[float] = field(default_factory=list)
+</code></pre>
+<p><code>BenchStats</code> aggregates all measurements from a benchmark run into one object. <code>req_per_s</code>, <code>tok_per_s</code>, and <code>wall_ms</code> are averages over <code>n_runs</code> measured requests. <code>wall_times</code> keeps the raw per-request timings; later chapters that analyse latency distributions — p50, p95, p99 — can compute percentiles from this list without re-running the benchmark. <code>ttft_ms</code> and <code>tpot_ms</code> default to <code>0.0</code> and remain at zero when not populated, following the same optional-field convention used in <code>RequestMetrics</code>.</p>
+<h2 id="offline-benchmark"><a class="header" href="#offline-benchmark">Offline benchmark</a></h2>
+<pre><code class="language-python">for _ in range(n_runs):
+    t0      = time.perf_counter()
+    result  = engine.generate(prompt, max_tokens, params)
+    wall_ms = (time.perf_counter() - t0) * 1000
+
+    wall_times.append(wall_ms)
+    tok_counts.append(result.metrics.output_tokens)
+    if result.metrics.ttft_ms:
+        ttfts.append(result.metrics.ttft_ms)
+    if result.metrics.tpot_ms:
+        tpots.append(result.metrics.tpot_ms)
+</code></pre>
+<p><code>offline_benchmark</code> calls <code>engine.generate()</code> directly. <code>time.perf_counter()</code> measures wall-clock elapsed time with nanosecond resolution — it is the correct timer for short durations. <code>time.time()</code> uses the system clock and can jump backward or forward if the OS adjusts it; <code>time.perf_counter()</code> is monotonic and immune to that. The multiplication by 1000 converts seconds to milliseconds, which are the natural unit for per-request latency on the models used in this book.</p>
+<p>The output token count comes from <code>result.metrics.output_tokens</code> rather than re-counting <code>result.output_ids</code>. The engine already measured this; there is no reason to recompute it. <code>ttft_ms</code> and <code>tpot_ms</code> are collected only when non-zero, preserving the same <code>0.0</code>-signals-unmeasured convention used throughout the contracts.</p>
+<p>Token counts matter because <code>max_new_tokens</code> is a ceiling, not a guarantee. HuggingFace’s <code>model.generate()</code> stops early if it produces an end-of-sequence token before reaching <code>max_new_tokens</code>. If the average output is 35 tokens when you asked for 40, computing tokens-per-second using 40 would give a number that is 14% optimistic. Reading <code>output_tokens</code> from the result gives the correct denominator.</p>
+<p>Aggregation divides total output tokens by total wall time:</p>
+<pre><code class="language-python">avg_wall   = _avg(wall_times)       # ms
+avg_tokens = _avg(tok_counts)
+req_per_s  = 1000 / avg_wall        # 1 / avg_seconds
+tok_per_s  = avg_tokens / (avg_wall / 1000)
+</code></pre>
+<h2 id="online-benchmark"><a class="header" href="#online-benchmark">Online benchmark</a></h2>
+<pre><code class="language-python">t0   = time.perf_counter()
+r    = requests.post(endpoint, json=payload)
+r.raise_for_status()
+wall_ms = (time.perf_counter() - t0) * 1000
+
+data = r.json()
+wall_times.append(wall_ms)
+tok_counts.append(data["usage"]["completion_tokens"])
+</code></pre>
+<p><code>online_benchmark</code> sends HTTP POST requests to the running server. The wall time is measured around the full <code>requests.post()</code> call — from the moment the client sends the request to the moment the response body is fully received. This includes TCP connection time (negligible for localhost), HTTP framing, JSON serialisation on the server, and JSON deserialisation on the client. The difference between this number and the offline wall time is the overhead the network stack and server layer add. For a localhost server this overhead is typically 0.5–5ms per request.</p>
+<p>The token count is read from <code>data["usage"]["completion_tokens"]</code> — the OpenAI-standard field in the response. The non-standard <code>metrics</code> field is also read for <code>ttft_ms</code> and <code>tpot_ms</code> when present, using <code>.get()</code> with a fallback to an empty dict so that the benchmark works correctly against servers that do not include a <code>metrics</code> field.</p>
+<p><code>r.raise_for_status()</code> converts any HTTP 4xx or 5xx response into a Python exception immediately. Without it, a server error would silently produce <code>None</code> JSON and the benchmark would either crash with an unhelpful <code>KeyError</code> or, worse, record a zero-token measurement and silently corrupt the averages.</p>
+<h2 id="server-lifecycle"><a class="header" href="#server-lifecycle">Server lifecycle</a></h2>
+<pre><code class="language-python">proc = launch_server(
+    server_module = "05_server:app",
+    port          = SERVER_PORT,
+    health_url    = f"{SERVER_URL}/health",
+    cwd           = CHAPTER_DIR,
+)
+try:
+    stats = online_benchmark(SERVER_URL, ...)
+    print_results("Ch01 baseline — online (HTTP)", stats)
+finally:
+    stop_server(proc)
+</code></pre>
+<p><code>launch_server</code> starts uvicorn as a child process using <code>subprocess.Popen</code>. The parent process then polls <code>GET /health</code> in a loop, sleeping one second between attempts, until the server returns HTTP 200 or a 60-second timeout expires. The poll loop exists because uvicorn takes a variable amount of time to start: it must import the server module, which triggers model loading, which on CPU can take several seconds. Polling <code>/health</code> is more reliable than sleeping a fixed duration.</p>
+<p><code>stop_server</code> calls <code>proc.terminate()</code>, which sends <code>SIGTERM</code> to the uvicorn process, followed by <code>proc.wait()</code>, which blocks until the process exits. This ensures the port is fully released before the benchmark script itself exits. Without <code>proc.wait()</code>, the port can remain bound briefly after the script ends, causing the next run to fail with “address already in use”.</p>
+<p>The <code>try / finally</code> block around the benchmark is critical. If <code>online_benchmark</code> raises an exception — a server error, a network timeout, a keyboard interrupt — <code>stop_server</code> still runs in the <code>finally</code> branch. Without it, a failed benchmark would leave a uvicorn process running in the background, holding the port and the GPU memory.</p>
+<h2 id="the-printed-table"><a class="header" href="#the-printed-table">The printed table</a></h2>
+<pre><code>  ──────────────────────────────────────────────────────
+  Ch01 baseline — offline (no HTTP)
+  ──────────────────────────────────────────────────────
+  Req/s        : 0.82
+  Tok/s        : 32.6
+  Wall time    : 1224ms / request
+  Tokens out   : 39 (avg over 20 runs)
+  ──────────────────────────────────────────────────────
+</code></pre>
+<p><code>print_results</code> omits <code>TTFT</code> and <code>TPOT</code> lines when they are zero, keeping the Chapter 1 output clean. Future chapters print a longer table. The label argument identifies which chapter and mode produced the table, making it straightforward to compare results across chapters or across offline and online runs side by side.</p>
+<p>These numbers are the baseline. Chapter 2 prints the same table immediately after building its own token-by-token loop. If the Chapter 2 numbers match Chapter 1’s to within a few percent, the new loop is correct — it is doing the same computation. If they differ significantly, there is a bug. The benchmark is the test.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-2"><a class="header" href="#chapter-2">Chapter 2</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-3"><a class="header" href="#chapter-3">Chapter 3</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-4"><a class="header" href="#chapter-4">Chapter 4</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-5"><a class="header" href="#chapter-5">Chapter 5</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-6"><a class="header" href="#chapter-6">Chapter 6</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-7"><a class="header" href="#chapter-7">Chapter 7</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-8"><a class="header" href="#chapter-8">Chapter 8</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-9"><a class="header" href="#chapter-9">Chapter 9</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-10"><a class="header" href="#chapter-10">Chapter 10</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-11"><a class="header" href="#chapter-11">Chapter 11</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-12"><a class="header" href="#chapter-12">Chapter 12</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chapter-13"><a class="header" href="#chapter-13">Chapter 13</a></h1>
+<blockquote>
+<p>🚧 Coming soon — check back shortly.</p>
+</blockquote>
+<p>In the meantime, see the <a href="#inference-from-scratch">Introduction</a> for what this chapter covers.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
