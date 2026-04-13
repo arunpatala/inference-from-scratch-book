@@ -92,8 +92,8 @@ chapters/
 Clone the repo and run any chapter independently:
 
 ```bash
-git clone https://github.com/arunpatala/inference-from-scratch.git
-cd inference-from-scratch/CODE/chapters/ch01_baseline
+git clone https://github.com/arunpatala/inference-from-scratch-book.git
+cd inference-from-scratch-book/CODE/chapters/ch01_baseline
 pip install torch transformers fastapi uvicorn requests
 python 00_start.py
 ```

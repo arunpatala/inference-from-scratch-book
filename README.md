@@ -2,7 +2,7 @@
 
 Build a complete LLM inference engine from scratch — in Python, in plain PyTorch, one concept at a time.
 
-📖 **Read the book:** https://arunpatala.github.io/inference-from-scratch/
+📖 **Read the book:** https://arunpatala.github.io/inference-from-scratch-book/
 
 ---
 

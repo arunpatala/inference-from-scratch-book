@@ -4,5 +4,5 @@ language = "en"
 src = "src"
 
 [output.html]
-git-repository-url = "https://github.com/arunpatala/inference-from-scratch"
+git-repository-url = "https://github.com/arunpatala/inference-from-scratch-book"
 git-repository-icon = "fa-github"
