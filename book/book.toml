@@ -1,0 +1,9 @@
+[book]
+title = "Inference From Scratch"
+author = "Arun Kumar Patala"
+language = "en"
+src = "src"
+
+[output.html]
+git-repository-url = "https://github.com/arunpatala/inference-from-scratch"
+git-repository-icon = "fa-github"
